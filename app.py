@@ -19,7 +19,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.ticker import AutoMinorLocator
-from scipy.ndimage import gaussian_filter1d
+def gaussian_filter1d(x, sigma):
+    """Pure-NumPy Gauss-Glättung (ersetzt scipy.ndimage.gaussian_filter1d)."""
+    if sigma <= 0:
+        return x.copy()
+    radius = int(4 * sigma + 0.5)
+    k = np.arange(-radius, radius + 1, dtype=float)
+    kernel = np.exp(-0.5 * (k / sigma) ** 2)
+    kernel /= kernel.sum()
+    return np.convolve(x, kernel, mode="same")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Seite konfigurieren
